@@ -1,3 +1,14 @@
+---
+layout:     post
+title:      Android和iOS的静态库生成
+subtitle:   
+date:       2017-08-23
+author:     Joy
+header-img: img/page-bg-people.png
+catalog: true
+tags:
+    - golang iOS Android
+---
 ### iOS封装生成.framework
 
 ##### 库的概念
