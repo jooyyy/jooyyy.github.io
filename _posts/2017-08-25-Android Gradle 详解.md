@@ -18,10 +18,12 @@ Groovy是在java平台上的、具有像Python、Ruby和Smalltalk语言特性的
 
 ##### Groovy部署
 
-* curl -s get.sdkman.io | bash
-* source "$HOME/.sdkman/bin/sdkman-init.sh"
-* sdk install groovy
-* groovy -version
+```
+- curl -s get.sdkman.io | bash
+- source "$HOME/.sdkman/bin/sdkman-init.sh"
+- sdk install groovy
+- groovy -version
+```
 
 关于Groovy语言的介绍有一篇不错的文章[Here](http://www.infoq.com/cn/articles/android-in-depth-gradle)
 
@@ -31,7 +33,9 @@ Gradle是一个编程框架，Android中用这个框架来完成App的编译打�
 
 ##### Gradle部署
 
-> sdk install gradle 4.1（前提是你已经部署了sdkman工具）
+```
+sdk install gradle 4.1（前提是你已经部署了sdkman工具）
+```
 
 ##### Gradle基本组件
 
