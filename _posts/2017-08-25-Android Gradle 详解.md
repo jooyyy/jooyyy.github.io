@@ -10,7 +10,7 @@ tags:
     - Gradle
 ---
 
-#### Android Gradle 详解
+#### Android Gradle 笔记
 
 ##### Groovy介绍
 
