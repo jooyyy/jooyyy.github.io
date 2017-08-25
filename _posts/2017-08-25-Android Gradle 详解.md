@@ -1,6 +1,6 @@
 ---
 layout:     post
-title:      Android Gradle 详解
+title:      Android Gradle 笔记
 subtitle:   
 date:       2017-08-25
 author:     Joy
@@ -114,55 +114,57 @@ Gradle主要有三种对象，与三种不同的脚本文件对应，在gradle�
 
 * Settings对象：每一个settings.gradle都会转换成一个settings对象
 
-```
-//Library工程必须加载此插件。注意，加载了Android插件就不要加载Java插件了。因为Android  
-//插件本身就是拓展了Java插件  
-apply plugin: 'com.android.library'   
-//android的编译，增加了一种新类型的ScriptBlock-->android  
-android {  
-       //你看，我在local.properties中设置的API版本号，就可以一次设置，多个Project使用了  
-      //借助我特意设计的gradle.ext.api属性  
-       compileSdkVersion =gradle.api  //这两个红色的参数必须设置  
-       buildToolsVersion  = "22.0.1"  
-       sourceSets{ //配置源码路径。这个sourceSets是Java插件引入的  
-       main{ //main：Android也用了  
-           manifest.srcFile 'AndroidManifest.xml' //这是一个函数，设置manifest.srcFile  
-           aidl.srcDirs=['src'] //设置aidl文件的目录  
-           java.srcDirs=['src'] //设置java文件的目录  
-        }  
+  ```
+  //Library工程必须加载此插件。注意，加载了Android插件就不要加载Java插件了。因为Android  
+  //插件本身就是拓展了Java插件  
+  apply plugin: 'com.android.library'   
+  //android的编译，增加了一种新类型的ScriptBlock-->android  
+  android {  
+         //你看，我在local.properties中设置的API版本号，就可以一次设置，多个Project使用了  
+        //借助我特意设计的gradle.ext.api属性  
+         compileSdkVersion =gradle.api  //这两个红色的参数必须设置  
+         buildToolsVersion  = "22.0.1"  
+         sourceSets{ //配置源码路径。这个sourceSets是Java插件引入的  
+         main{ //main：Android也用了  
+             manifest.srcFile 'AndroidManifest.xml' //这是一个函数，设置manifest.srcFile  
+             aidl.srcDirs=['src'] //设置aidl文件的目录  
+             java.srcDirs=['src'] //设置java文件的目录  
+          }  
+       }  
+     dependencies {  //配置依赖关系  
+        //compile表示编译和运行时候需要的jar包，fileTree是一个函数，  
+       //dir:'libs'，表示搜索目录的名称是libs。include:['*.jar']，表示搜索目录下满足*.jar名字的jar  
+       //包都作为依赖jar文件  
+         compile fileTree(dir: 'libs', include: ['*.jar'])  
      }  
-   dependencies {  //配置依赖关系  
-      //compile表示编译和运行时候需要的jar包，fileTree是一个函数，  
-     //dir:'libs'，表示搜索目录的名称是libs。include:['*.jar']，表示搜索目录下满足*.jar名字的jar  
-     //包都作为依赖jar文件  
-       compile fileTree(dir: 'libs', include: ['*.jar'])  
-   }  
-}  //android SB配置完了  
-//clean是一个Task的名字，这个Task好像是Java插件（这里是Android插件）引入的。  
-//dependsOn是一个函数，下面这句话的意思是 clean任务依赖cposCleanTask任务。所以  
-//当你gradle clean以执行clean Task的时候，cposCleanTask也会执行  
-clean.dependsOn 'cposCleanTask'  
-//创建一个Task，  
-task cposCleanTask() <<{  
-    cleanOutput(true)  //cleanOutput是utils.gradle中通过extra属性设置的Closure  
-}  
-//前面说了，我要把jar包拷贝到指定的目录。对于Android编译，我一般指定gradle assemble  
-//它默认编译debug和release两种输出。所以，下面这个段代码表示：  
-//tasks代表一个Projects中的所有Task，是一个容器。getByName表示找到指定名称的任务。  
-//我这里要找的assemble任务，然后我通过doLast添加了一个Action。这个Action就是copy  
-//产出物到我设置的目标目录中去  
-tasks.getByName("assemble"){  
-   it.doLast{  
-       println "$project.name: After assemble, jar libs are copied tolocal repository"  
-        copyOutput(true)  
-     }  
-}  
-/* 
-  因为我的项目只提供最终的release编译出来的Jar包给其他人，所以不需要编译debug版的东西 
-  当Project创建完所有任务的有向图后，我通过afterEvaluate函数设置一个回调Closure。在这个回调 
-  Closure里，我disable了所有Debug的Task 
-*/  
-project.afterEvaluate{  
-    disableDebugBuild()  
-}  
-```
+  }  //android SB配置完了  
+  //clean是一个Task的名字，这个Task好像是Java插件（这里是Android插件）引入的。  
+  //dependsOn是一个函数，下面这句话的意思是 clean任务依赖cposCleanTask任务。所以  
+  //当你gradle clean以执行clean Task的时候，cposCleanTask也会执行  
+  clean.dependsOn 'cposCleanTask'  
+  //创建一个Task，  
+  task cposCleanTask() <<{  
+      cleanOutput(true)  //cleanOutput是utils.gradle中通过extra属性设置的Closure  
+  }  
+  //前面说了，我要把jar包拷贝到指定的目录。对于Android编译，我一般指定gradle assemble  
+  //它默认编译debug和release两种输出。所以，下面这个段代码表示：  
+  //tasks代表一个Projects中的所有Task，是一个容器。getByName表示找到指定名称的任务。  
+  //我这里要找的assemble任务，然后我通过doLast添加了一个Action。这个Action就是copy  
+  //产出物到我设置的目标目录中去  
+  tasks.getByName("assemble"){  
+     it.doLast{  
+         println "$project.name: After assemble, jar libs are copied tolocal repository"  
+          copyOutput(true)  
+       }  
+  }  
+  /* 
+    因为我的项目只提供最终的release编译出来的Jar包给其他人，所以不需要编译debug版的东西 
+    当Project创建完所有任务的有向图后，我通过afterEvaluate函数设置一个回调Closure。在这个回调 
+    Closure里，我disable了所有Debug的Task 
+  */  
+  project.afterEvaluate{  
+      disableDebugBuild()  
+  }  
+  ```
+
+  ​
