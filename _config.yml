@@ -1,6 +1,6 @@
 # Site settings
 title: Joy Blog
-SEOTitle: 周毅的博客 | Joy Blog
+SEOTitle: Joy的博客
 header-img: img/index-bg-wall.jpg
 email: joy060102@gmail.com
 description: "Every failure is leading towards success."
@@ -11,7 +11,7 @@ github_repo: "https://github.com/jooyyy/jooyyy.github.io.git" # you code reposit
 
 # Sidebar settings
 sidebar: true                           # whether or not using Sidebar.
-sidebar-about-description: "每一步，都算数"
+sidebar-about-description: "Know it, do it"
 sidebar-avatar: img/avatar-by.jpg      # use absolute URL, seeing it's used in both `/` and `/about/`
 
 
